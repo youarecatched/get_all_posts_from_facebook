@@ -19,7 +19,7 @@ def get_posts(pattern):
         if "message" in ct:
             content = ct["message"]
             if pattern in content:
-                list_content.append(content)
+                list_content.append({"content":content})
     return jsonify({"data":list_content})
 
 app.run(host='localhost', port=3000)
