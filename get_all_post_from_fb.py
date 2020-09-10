@@ -9,8 +9,8 @@ db = MongoDB("facebook", "tatnh", "123456")
 with db.open("post") as dbpost:
     name = "tatnh"
     datapost = data["posts"]["data"]
-    data = dbpost.update({"_id":name},{"$set":{"data":datapost, "_id":name}}, upsert=True)
+    dbpost.update({"_id":name},{"$set":{"data":datapost, "_id":name}}, upsert=True)
     # dbpost.remove()
-    data = dbpost.find_one({})
+    # data = dbpost.find_one({})
     # print(data)
 
