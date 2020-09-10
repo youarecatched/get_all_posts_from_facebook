@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import flask
+import re
 from flask import request, abort, jsonify
 from MongoDB import MongoDB
 app = flask.Flask(__name__)
@@ -9,19 +10,18 @@ app.config["DEBUG"] = True
 def get_posts():
     db = MongoDB("facebook")
     search_term = request.args.get('q')
+    data = None
     with db.open("posts") as dbpost:
-        data = dbpost.find_one({"_id":"tatnh"})
+        find_ = re.compile(search_term, re.IGNORECASE)
+        data = list(dbpost.find({"name":"tatnh", "content":{"$regex":find_}}))
     if not data:
         return "NULL"
-    else:
-        data = data["data"]
     list_content = []
     for ct in data:
-        if "message" in ct:
-            content = ct["message"]
+        if "content" in ct:
+            content = ct["content"]
             if search_term.lower() in content.lower():
                 content = content
                 list_content.append({"content": content.encode("utf-8").decode("utf-8")})
     return jsonify({"data":list_content})
-
 app.run(host='localhost', port=3000)

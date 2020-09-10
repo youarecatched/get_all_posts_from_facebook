@@ -8,6 +8,7 @@ class MongoDB():
 	def __init__(self, database):
 		self.database = urllib.parse.quote_plus(database)
 		self.connection = MongoClient("mongodb://localhost:27017/{}".format(self.database))
+		
 	def connect(self, collection):
 		try:
 			self.collection = urllib.parse.quote_plus(collection)

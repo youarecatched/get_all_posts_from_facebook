@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import requests
 from MongoDB import MongoDB
-token = "EAAW32eEZApB0BACqDNm1LNbSja8neci6xqCYEXSyidzPMnTdETeIUWMSEbUD1hjWAeUoRUuNDe0SDcvzY0klezZAfyrJdolJqwy0KFkRGb7ucMTvXFEJPUj6xBjHMZBwajjm6BGuoySCtxld4fsC3yohkVYok3D8a8PE1iCIrGVtE35PVdYWS9uIb1YNXAZD"
+token = "EAAW32eEZApB0BAHyqPoG1RCLZACwlgi8xzcWFCxz34JTwHAkZCYy63Kywxp9weNSUUKtzxeGS3DLV76z1zg6vfHOwqM22bG3QcIIzWW42EN8iwbqGwgHX7ryDtvx6T3dP0YrUwqRHKpX9MrVfR5BCrTclDZC6Ip7akR0o0XXz2UZBqbZBjzmrTCOj9MhYiOZBcZD"
 link_api = "https://graph.facebook.com/me?fields=posts&access_token="+token
 resp = requests.get(link_api)
 data = resp.json()
@@ -10,12 +10,18 @@ db = MongoDB("facebook")
 # print(data["posts"]["data"])
 
 #create db if db not exist
-with db.open("posts") as dbpost:
-    name = "tatnh"
-    # print(data)
-    datapost = data["posts"]["data"]
-    dbpost.update({"_id":name},{"$set":{"data":datapost, "_id":name}}, upsert=True)
-    dbpost.remove()
-    # data = dbpost.find_one({})
-    # print(data)
 
+#collection
+# postid_col = db.connect("postID")
+postcontent_col = db.connect("posts")
+#data get from facebook
+datapost = list(data["posts"]["data"])
+name = "tatnh"
+for dp in datapost:
+    if "message" in dp:
+        content = dp["message"]
+        created_time = dp["created_time"]
+        id_post = dp["id"]
+        postcontent_col.update({"_id":id_post},{"$set":{"content":content, "name":name, "_id":id_post, "created_time":created_time}}, upsert=True)
+        # postcontent_col.remove()
+db.disconnect()
