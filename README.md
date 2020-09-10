@@ -6,7 +6,7 @@ Các bước chạy code:
 
 Ví dụ:
 Sử dụng curl để post dữ liệu.
-curl -X POST "http://localhost:3000/posts/search?q=sinh"
+cú pháp: curl -X POST "http://localhost:3000/posts/search?q=sinh"
 
 kết quả:
 {
