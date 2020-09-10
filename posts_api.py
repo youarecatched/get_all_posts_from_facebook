@@ -7,7 +7,7 @@ app.config["DEBUG"] = True
 @app.route("/posts/search", methods=["POST"])
 def get_posts():
     db = MongoDB("facebook", "tatnh", "123456")
-    pattern = request.args.get('q')
+    search_term = request.args.get('q')
     with db.open("post") as dbpost:
         data = dbpost.find_one({"_id":"tatnh"})
     if not data:
@@ -18,7 +18,7 @@ def get_posts():
     for ct in data:
         if "message" in ct:
             content = ct["message"]
-            if pattern in content:
+            if search_term in content:
                 list_content.append({"content":content})
     return jsonify({"data":list_content})
 
