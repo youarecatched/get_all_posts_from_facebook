@@ -4,10 +4,10 @@ from MongoDB import MongoDB
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-@app.route("/posts/search=<pattern>", methods=["POST"])
-def get_posts(pattern):
+@app.route("/posts/search", methods=["POST"])
+def get_posts():
     db = MongoDB("facebook", "tatnh", "123456")
-    print("str:",repr(pattern))
+    pattern = request.args.get('q')
     with db.open("post") as dbpost:
         data = dbpost.find_one({"_id":"tatnh"})
     if not data:
