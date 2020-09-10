@@ -19,7 +19,7 @@ def get_posts():
     for ct in data:
         if "message" in ct:
             content = ct["message"]
-            if search_term in content:
+            if search_term.lower() in content.lower():
                 content = content
                 list_content.append({"content": content.encode("utf-8").decode("utf-8")})
     return jsonify({"data":list_content})
